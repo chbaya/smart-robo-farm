@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Impossible Mode 😈</title>
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    background:linear-gradient(135deg,#1f1c2c,#928dab);
+    font-family:Arial;
+    overflow:hidden;
+    position:relative;
+}
+
+#message{
+    font-size:22px;
+    color:white;
+    text-align:center;
+    margin-bottom:30px;
+    transition:0.5s;
+    padding:0 20px;
+}
+
+button{
+    padding:12px 25px;
+    font-size:16px;
+    border:none;
+    border-radius:30px;
+    cursor:pointer;
+    position:absolute;
+    transition:0.2s;
+}
+
+#btn{
+    background:#ff004c;
+    color:white;
+}
+
+#finalBtn{
+    background:#00c9ff;
+    color:white;
+    position:static;
+    margin-top:20px;
+    display:none;
+}
+
+canvas{
+    position:absolute;
+    top:0;
+    left:0;
+    pointer-events:none;
+}
+</style>
+</head>
+<body>
+
+<div id="message">
+t7eb traja3 ll info enzel 3al btn 😏
+</div>
+
+<button id="btn">enzel</button>
+<button id="finalBtn">click here</button>
+<canvas id="confetti"></canvas>
+
+<script>
+const btn = document.getElementById("btn");
+const finalBtn = document.getElementById("finalBtn");
+const msg = document.getElementById("message");
+
+let tries = 0;
+let unlocked = false;
+
+// center button
+function centerButton(){
+    btn.style.left = (window.innerWidth/2 - 50) + "px";
+    btn.style.top = (window.innerHeight*0.65) + "px";
+}
+centerButton();
+
+// move button first 5 tries
+function moveButton(){
+    if(unlocked) return;
+
+    tries++;
+
+    if(tries >= 5){
+        unlocked = true;
+        btn.style.position="static";
+        msg.innerHTML="😏 9oul 9arwi 5ayeb haw bech na3tik serie behay";
+        startConfetti();
+        return;
+    }
+
+    const x = Math.random()*(window.innerWidth-100);
+    const y = Math.random()*(window.innerHeight-60);
+    btn.style.left = x+"px";
+    btn.style.top = y+"px";
+
+    if(navigator.vibrate) navigator.vibrate(40);
+}
+
+btn.addEventListener("touchstart", moveButton);
+btn.addEventListener("mouseover", moveButton);
+
+// after unlocked click
+btn.addEventListener("click",()=>{
+    if(!unlocked) return;
+
+    finalBtn.style.display="inline-block";
+});
+
+// final button
+finalBtn.addEventListener("click",()=>{
+    msg.innerHTML="😴🔥 BARA OR9OD";
+    msg.style.color="#00ffcc";
+    startConfetti();
+});
+
+// CONFETTI
+const canvas=document.getElementById("confetti");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let pieces=[];
+
+function startConfetti(){
+    pieces=[];
+    for(let i=0;i<150;i++){
+        pieces.push({
+            x:Math.random()*canvas.width,
+            y:Math.random()*canvas.height-canvas.height,
+            size:Math.random()*8+4,
+            speed:Math.random()*3+2,
+            color:`hsl(${Math.random()*360},100%,50%)`
+        });
+    }
+    animateConfetti();
+}
+
+function animateConfetti(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    pieces.forEach(p=>{
+        ctx.fillStyle=p.color;
+        ctx.fillRect(p.x,p.y,p.size,p.size);
+        p.y+=p.speed;
+        if(p.y>canvas.height) p.y=-10;
+    });
+    requestAnimationFrame(animateConfetti);
+}
+</script>
+
+</body>
+</html>
